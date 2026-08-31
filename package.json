@@ -1,0 +1,51 @@
+{
+  "name": "payload-location-fields",
+  "version": "0.1.0",
+  "description": "Reusable location field plugin for Payload CMS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "geodata.db"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./providers": "./dist/providers/index.js",
+    "./admin/AFields": {
+      "types": "./dist/admin/AFields.d.ts",
+      "import": "./dist/admin/AFields.js"
+    },
+    "./admin/AddrField": {
+      "types": "./dist/admin/AddrField.d.ts",
+      "import": "./dist/admin/AddrField.js"
+    },
+    "./admin/PostalCodeField": {
+      "types": "./dist/admin/PostalCodeField.d.ts",
+      "import": "./dist/admin/PostalCodeField.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@payloadcms/ui": "3.87.0",
+    "payload": "^3.0.0",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@payloadcms/ui": "3.87.0",
+    "@types/node": "^24.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.8.0"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "payload-location-fields": "file:",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  }
+}
