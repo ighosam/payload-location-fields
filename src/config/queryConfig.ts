@@ -17,7 +17,7 @@ export const queryConfig = {
     table: 'states',
     dependsOn: ['country'],
     build: (f: Filters) => `
-country_code = (
+  country_code = (
     SELECT country_code
     FROM countries
     WHERE name = '${f.country}'

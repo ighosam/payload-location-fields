@@ -1,46 +1,69 @@
-
 import type { Endpoint } from 'payload'
+
 import { fetchLocationData } from '../utilities/fetchLocationData.js'
+import type { LocationQuery } from '../types.js'
 
 export const locationEndpoint: Endpoint = {
-  path: '/location',
+  path: '/geo-location',
   method: 'get',
 
   handler: async (req) => {
-    const postalCode = req.query?.postalCode
-    const country = req.query?.country
+    const url = new URL(
+      req.url ?? 'http://localhost',
+    )
 
-    if (
-      typeof postalCode !== 'string' ||
-      typeof country !== 'string' ||
-      !postalCode ||
-      !country
-    ) {
-      return Response.json(
-        {
-          error: 'postalCode and country are required',
-        },
-        {
-          status: 400,
-        },
-      )
+    const postalCode =
+      url.searchParams.get('postalCode') ?? undefined
+
+    const city =
+      url.searchParams.get('city') ?? undefined
+
+    const state =
+      url.searchParams.get('state') ?? undefined
+
+    const country =
+      url.searchParams.get('country') ?? undefined
+
+    const query: LocationQuery = {
+      postalCode,
+      city,
+      state,
+      country,
     }
 
     try {
-      const data = await fetchLocationData({
-        postalCode,
-        country,
-      })
+      const coordinates =
+        await fetchLocationData(query)
 
-      return Response.json(data, {
-        status: 200,
+      if (!coordinates) {
+        return Response.json(
+          {
+            success: false,
+            message: 'Location not found.',
+          },
+          {
+            status: 404,
+          },
+        )
+      }
+
+      return Response.json({
+        success: true,
+        coordinates,
       })
     } catch (error) {
-      console.error('Error fetching location data:', error)
+      console.error(
+        'Location endpoint error:',
+        error,
+      )
 
       return Response.json(
         {
-          error: 'Error fetching location data',
+          success: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Geocoding failed.',
         },
         {
           status: 500,
@@ -49,4 +72,3 @@ export const locationEndpoint: Endpoint = {
     }
   },
 }
-

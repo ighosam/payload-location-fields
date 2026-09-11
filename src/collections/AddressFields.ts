@@ -24,6 +24,6 @@ export const AddressFields: CollectionConfig = {
    country,
    state,
    city,
-   locationEndpoint
+   //locationEndpoint
   ]
 }

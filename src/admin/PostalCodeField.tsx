@@ -4,7 +4,6 @@
 import React from 'react'
 import { TextInput, useField } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
-import { fetchLocationData } from '../utilities/fetchLocationData.js'
 
 const PostalCodeField: TextFieldClientComponent = (props) => {
   const path = props.path as string
@@ -50,8 +49,6 @@ const PostalCodeField: TextFieldClientComponent = (props) => {
   }
 
   const handleBlur = async (e: React.FocusEvent<HTMLDivElement>) => {
-    // Ignore blur events when focus moves between elements
-    // inside this component.
     if (
       e.relatedTarget instanceof Node &&
       e.currentTarget.contains(e.relatedTarget)
@@ -67,18 +64,34 @@ const PostalCodeField: TextFieldClientComponent = (props) => {
     }
 
     try {
-      const location = await fetchLocationData({
+      console.log('I AM ABOUT TO CALL THE API')
+
+      const params = new URLSearchParams({
         postalCode,
         country: countryValue,
-        ...(city?.trim() ? { city: city.trim() } : {}),
-        ...(state?.trim() ? { state: state.trim() } : {}),
       })
 
-      console.log('Location:', location)
+      if (city?.trim()) {
+        params.set('city', city.trim())
+      }
 
-      if (location) {
-        setLongitude(location.coordinates[0])
-        setLatitude(location.coordinates[1])
+      if (state?.trim()) {
+        params.set('state', state.trim())
+      }
+
+      const response = await fetch(`/api/geo-location?${params.toString()}`)
+
+      if (!response.ok) {
+        throw new Error(`Location API returned ${response.status}`)
+      }
+
+      const location = await response.json()
+
+      console.log('Location2:',location.coordinates.coordinates)
+
+      if (location?.coordinates) {
+        setLongitude(location.coordinates.coordinates[0])
+        setLatitude(location.coordinates.coordinates[1])
       }
     } catch (error) {
       console.error('Error fetching location data:', error)

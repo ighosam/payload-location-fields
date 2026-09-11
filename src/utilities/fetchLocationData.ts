@@ -1,123 +1,51 @@
-export interface CoordinatePoint {
-  type: 'Point'
-  coordinates: [number, number] // [longitude, latitude]
-}
+import type {
+  CoordinatePoint,
+  LocationQuery,
+} from '../types.js'
 
-export interface LocationQuery {
-  postalCode?: string
-  city?: string
-  state?: string
-  country?: string
-}
+import { fetchGoogleLocationData } from './fetchGoogleLocationData.js'
+import { fetchGeoapifyLocationData } from './fetchGeoapifyLocationData.js'
+import { fetchNominatimLocationData } from './fetchNominatimLocationData.js'
 
-interface NominatimResult {
-  lat: string
-  lon: string
-}
-
-const NOMINATIM_URL =
-  'https://nominatim.openstreetmap.org/search'
-
-/**
- * Search Nominatim using a postal code and optional
- * city/state/country information.
- *
- * Search rules:
- *
- * 1. postalCode + country
- * 2. postalCode + city + state + country
- *
- * City and state are treated as a pair. If either one
- * is missing, neither is included in the query.
- */
 export async function fetchLocationData(
   query: LocationQuery,
 ): Promise<CoordinatePoint | null> {
-  const {
-    postalCode,
-    city,
-    state,
-    country,
-  } = query
 
-  // Postal code is required for this search.
-  if (!postalCode) {
-    return null
-  }
+  const provider = process.env.GEOCODING_PROVIDER ?? 'nominatim'
+  const apiKey = process.env.GEOCODING_API_KEY
 
-  const parts: string[] = []
+  switch (provider) {
 
-  // Always start with the postal code.
-  parts.push(postalCode.trim())
+    case 'google':
+      if (!apiKey) {
+        throw new Error(
+          'Google geocoding requires GEOCODING_API_KEY.',
+        )
+      }
 
-  // Only include city and state when BOTH are available.
-  if (city?.trim() && state?.trim()) {
-    parts.push(city.trim())
-    parts.push(state.trim())
-  }
-
-  // Country is optional, but should normally be provided.
-  if (country?.trim()) {
-    parts.push(country.trim())
-  }
-
-  const searchQuery = parts.join(', ')
-
-  const params = new URLSearchParams({
-    q: searchQuery,
-    format: 'jsonv2',
-    addressdetails: '1',
-    limit: '1',
-  })
-
-  try {
-    const response = await fetch(
-      `${NOMINATIM_URL}?${params.toString()}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'payload-location-fields',
-        },
-      },
-    )
-
-    if (!response.ok) {
-      console.error(
-        `Nominatim request failed: ${response.status} ${response.statusText}`,
+      return fetchGoogleLocationData(
+        query,
+        apiKey,
       )
 
-      return null
-    }
+    case 'geoapify':
+      if (!apiKey) {
+        throw new Error(
+          'Geoapify geocoding requires GEOCODING_API_KEY.',
+        )
+      }
 
-    const results = (await response.json()) as NominatimResult[]
+      return fetchGeoapifyLocationData(
+        query,
+        apiKey,
+      )
 
-    if (!results.length) {
-      return null
-    }
+    case 'nominatim':
+      return fetchNominatimLocationData(query)
 
-    const result = results[0]
-
-    const latitude = Number.parseFloat(result.lat)
-    const longitude = Number.parseFloat(result.lon)
-
-    // Protect against invalid coordinates.
-    if (
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude)
-    ) {
-      return null
-    }
-
-    return {
-      type: 'Point',
-      coordinates: [longitude, latitude],
-    }
-  } catch (error) {
-    console.error(
-      'Error while querying Nominatim:',
-      error,
-    )
-
-    return null
+    default:
+      throw new Error(
+        `Unsupported geocoding provider: ${provider}`,
+      )
   }
 }

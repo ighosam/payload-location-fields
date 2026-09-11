@@ -1,29 +1,27 @@
-import type { Plugin } from 'payload'
-
-import type { GeocoderProvider } from './providers/Provider.js'
-
-export type ProviderName =
-  | 'google'
-  | 'mapbox'
-  | 'nominatim'
-
-export interface LocationPluginOptions {
-
-  collections: string[]
-
-  provider?: ProviderName | GeocoderProvider
-
-  apiKey?: string
-
-  defaultCountry?: string
-
-  enableAutocomplete?: boolean
-
-  enableBrowserLocation?: boolean
-
-  enableMap?: boolean
+export interface CoordinatePoint {
+  type: 'Point'
+  coordinates: [number, number] // [longitude, latitude]
 }
 
-export type LocationPlugin = (
-  options: LocationPluginOptions
-) => Plugin
+export interface LocationQuery {
+  postalCode?: string
+  city?: string
+  state?: string
+  country?: string
+}
+
+export type GeocodingProvider =
+  | 'google'
+  | 'geoapify'
+  | 'nominatim'
+
+
+export interface LocationPluginOptions {
+  collections: string[]
+}
+/*
+export interface GeocodingOptions {
+  provider?: GeocodingProvider
+  apiKey?: string
+}
+  */
