@@ -7,7 +7,10 @@ import { locationEndpoint } from './endpoints/locationEndpoint.js'
 
 export const payloadLocationFieldsPlugin =
   (options: LocationPluginOptions):Plugin =>
-  (incomingConfig: Config): Config => ({
+  (incomingConfig: Config): Config => {
+    //const addressCollection = AddressFields(options)
+
+    return{
       ...incomingConfig,
      
       collections: [
@@ -25,11 +28,12 @@ export const payloadLocationFieldsPlugin =
           }
         }),
         AddressFields,
+        //addressCollection
       ],
         endpoints:[
               ...(incomingConfig.endpoints || []),
               locationEndpoint
             ],  
-    
-  })
+          } 
+  }
 

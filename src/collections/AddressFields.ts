@@ -1,5 +1,7 @@
+import type { LocationPluginOptions } from "../types.js"
 import { CollectionConfig } from 'payload';
 import { createOptionsEndpoint } from '../endpoints/createOptionsEnpoint.js';
+
 import { locationEndpoint } from '../endpoints/locationEndpoint.js';
 
 const country = createOptionsEndpoint('country')
@@ -27,3 +29,35 @@ export const AddressFields: CollectionConfig = {
    //locationEndpoint
   ]
 }
+
+/*
+export const AddressFields = (options: LocationPluginOptions): CollectionConfig => {
+  const country = createOptionsEndpoint('country', options)
+  const state = createOptionsEndpoint('state', options)
+  const city = createOptionsEndpoint('city', options)
+
+  return {
+    slug: 'addr-field',
+
+    access: {
+      read: () => true,
+      create: () => true,
+      update: () => true,
+      delete: () => true,
+    },
+
+    admin: {
+      hidden: true,
+    },
+
+    fields: [],
+
+    endpoints: [
+      country,
+      state,
+      city,
+      //locationEndpoint(options),
+    ],
+  }
+}
+  */
