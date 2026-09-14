@@ -108,6 +108,7 @@ const PostalCodeField: TextFieldClientComponent = (props) => {
         label="Postal Code"
         value={value || ''}
         onChange={handleChange}
+         style={{ width: '100%' }}
       />
     </div>
   )

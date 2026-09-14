@@ -5,5 +5,12 @@ export const longitudeField: Field = {
   type: 'number',
   admin: {
     readOnly: true,
+    components:{
+       Field: 'payload-location-fields/admin/TextField#default'
+    },
+    custom:{
+      name: 'Longitude',
+    }
+   
   },
 }

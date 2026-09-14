@@ -6,7 +6,7 @@ export const cityField: Field = {
   required: false,
 
   admin: {
-    hidden:true,
+    //hidden:true,
     components:{
     //Field: 'payload-vehicle-fields/admin/VehicleMakeRouterField#default'
     Field: 'payload-location-fields/admin/AddrField#default'
@@ -18,6 +18,6 @@ export const cityField: Field = {
       dependsOn: ['country','state'],
     },
      // 👇 this is how the component knows where to load from
-   //condition: (_, siblingData) => Boolean(siblingData?.state) 
+   condition: (_, siblingData) => Boolean(siblingData?.state) 
   },
 }

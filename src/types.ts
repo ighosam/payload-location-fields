@@ -16,7 +16,7 @@ export type GeocodingProvider =
   | 'nominatim'
 
 
-export type LocationPluginOptions ={
+export type LocationPluginOptions = {
   collections: string[]
 }
 /*

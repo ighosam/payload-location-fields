@@ -24,6 +24,10 @@
     "./admin/PostalCodeField": {
       "types": "./dist/admin/PostalCodeField.d.ts",
       "import": "./dist/admin/PostalCodeField.js"
+    },
+    "./admin/TextField": {
+      "types": "./dist/admin/TextField.d.ts",
+      "import": "./dist/admin/TextField.js"
     }
   },
   "scripts": {

@@ -5,5 +5,12 @@ export const latitudeField: Field = {
   type: 'number',
   admin: {
     readOnly: true,
+    components:{
+       Field: 'payload-location-fields/admin/TextField#default'
+    },
+    custom:{
+      name: 'Latitude',
+    }
+   
   },
 }

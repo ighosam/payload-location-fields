@@ -43,19 +43,14 @@ const loadOptions = async () => {
 
 ///////
   const dependsOn = props.field.admin?.custom?.dependsOn
-console.log("depends on is: ",dependsOn)
-  console.log('the endpoint is: ',endpoint)
 
   const entries = dependsOn.map((res:stringMap) =>[res,value[res]])
-console.log(entries,null,2)
 
   filters = Object.fromEntries(
   entries
  )
   
 //////
-
-console.log(JSON.stringify(filters,null,2))
 
   const params = new URLSearchParams()
 
@@ -66,9 +61,6 @@ console.log(JSON.stringify(filters,null,2))
   })
    
   try {
-    console.log('New Params is:', params.toString())
-    console.log('Params is:', params.toString())
-
     const res = await fetch(`${endpoint}?${params.toString()}`, {
       signal: controller.signal,
     })

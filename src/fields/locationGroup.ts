@@ -11,37 +11,48 @@ import { pointField } from './pointField.js'
 
 import { withWidth } from '../utilities/withWidth.js'
 
+const halfWidth = (field: Field): Field => ({
+  ...field,
+  admin: {
+    ...(field as any).admin,
+    width: '100%',
+    style: {
+          width: '100%',
+        },
+  },
+})
+
 
 export const locationGroup: Field = {
   name: 'location',
   type: 'group',
+  
   fields: [
-    addressField,
+    withWidth(addressField),
     {
       type: 'row',
       fields: [
-        withWidth(countryField),
-        withWidth(provinceField),
+        halfWidth(countryField),
+        halfWidth(provinceField),
       ],
     },
 
     {
       type: 'row',
       fields: [
-        withWidth(cityField),
-        withWidth(postalCodeField),   
+        halfWidth(cityField),
+        halfWidth(postalCodeField),   
       ],
     },
     {
       type: 'row',
-
       fields: [
-        withWidth(latitudeField),
-        withWidth(longitudeField),
+        halfWidth(latitudeField),
+        halfWidth(longitudeField),
       ],
     },
 
-    formattedField,
-    pointField,
+    //formattedField,
+    //pointField,
   ],
 }

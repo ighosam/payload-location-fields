@@ -6,7 +6,8 @@ export default defineConfig({
     
     'admin/AddrField': 'src/admin/AddrField.tsx',
     'admin/AFields': 'src/admin/AFields.tsx',
-    'admin/PostalCodeField': 'src/admin/PostalCodeField.tsx'
+    'admin/PostalCodeField': 'src/admin/PostalCodeField.tsx',
+    'admin/TextField': 'src/admin/TextField.tsx'
   },
   format: ['esm'],
   dts: true,

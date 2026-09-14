@@ -6,7 +6,7 @@ export const provinceField: Field = {
   label: 'Province / State',
 
   admin: { 
-    hidden:true, 
+    //hidden:true, 
     components:{
 
     //Field: 'payload-vehicle-fields/admin/VehicleMakeRouterField#default'
